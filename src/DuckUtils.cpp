@@ -56,7 +56,7 @@ std::string createUuid(int length) {
 }
 
 // Note: This function is not thread safe
-std::string convertToHex(byte* data, int size) {
+std::string convertToHex( byte* data, int size) {
   std::string buf = ""; // static to avoid memory leak
   buf.clear();
   buf.reserve(size * 2); // 2 digit hex
@@ -163,7 +163,7 @@ std::string toUpperCase(std::string str) {
 
 // Note: This function is provided as a convenience for Arduino users who are using String in their code
 // This function should not be used in CDP library code!
-std::vector<byte> stringToByteVector(const String& str) {
+std::vector<byte> stringToByteVector(const std::string& str) {
     std::vector<byte> byteVec;
     byteVec.reserve(str.length());
 
