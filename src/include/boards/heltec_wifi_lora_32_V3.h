@@ -13,7 +13,6 @@
 #define CDP_BOARD_NAME "Heltec WiFi LoRa 32 V3"
 #define CDPCFG_RADIO_SX1262
 
-
 // Uncomment this to enable the OLED display
 #define ENABLE_DISPLAY
 
