@@ -23,13 +23,17 @@
 #include <Wire.h>
 #define XPOWERS_CHIP_AXP192
 #include <XPowersLib.h>
-
+#define CDP_LOG_INFO
+#define CDPCFG_WIFI_NONE
+#define ARDUINO_TBeam
 XPowersPMU axp;
 
 bool runSensor(void *);
 const uint8_t i2c_sda = 21;
 const uint8_t i2c_scl = 22;
 
+#define XPOWERS_AXP192_BAT_CHG_DONE_IRQ 0x01
+#define XPOWERS_AXP192_BAT_CHG_START_IRQ 0x02
 
 DuckDisplay* display = NULL;
 
@@ -38,8 +42,8 @@ DuckDisplay* display = NULL;
 MamaDuck duck;
 
 auto timer = timer_create_default();
-const int INTERVAL_MS = 60000;
-char message[32]; 
+const int INTERVAL_MS = 30000;
+char message[32];
 int counter = 1;
 
 void setup() {
@@ -47,6 +51,7 @@ void setup() {
   // given during the device provisioning then converted to a byte vector to
   // setup the duck NOTE: The Device ID must be exactly 8 bytes otherwise it
   // will get rejected
+    WiFi.mode(WIFI_OFF);
   std::string deviceId("MAMA0001");
   std::vector<byte> devId;
   devId.insert(devId.end(), deviceId.begin(), deviceId.end());
@@ -61,9 +66,62 @@ void setup() {
 
    Wire.begin(i2c_sda, i2c_scl);
 
-     int ret = axp.begin(Wire, AXP192_SLAVE_ADDRESS,i2c_sda,i2c_scl);
+     int ret = axp.begin(Wire, 0x34,i2c_sda,i2c_scl);
+    // change instances of "power" to "axp" to match the library
+    axp.setSysPowerDownVoltage(2700);
 
-     axp.enableIRQ(XPOWERS_AXP192_BAT_CHG_DONE_IRQ | XPOWERS_AXP192_BAT_CHG_START_IRQ);
+    // Set the minimum common working voltage of the PMU VBUS input,
+    // below this value will turn off the PMU
+    axp.setVbusVoltageLimit(XPOWERS_AXP192_VBUS_VOL_LIM_4V5);
+
+    // Turn off USB input current limit
+    axp.setVbusCurrentLimit(XPOWERS_AXP192_VBUS_CUR_LIM_OFF);
+
+    // DC1 700~3500mV, IMAX=1.2A
+    axp.setDC1Voltage(3300);
+    Serial.printf("DC1  :%s   Voltage:%u mV \n",  axp.isEnableDC1()  ? "+" : "-", axp.getDC1Voltage());
+
+    // DC2 700~2750 mV, IMAX=1.6A;
+    axp.setDC2Voltage(700);
+    Serial.printf("DC2  :%s   Voltage:%u mV \n",  axp.isEnableDC2()  ? "+" : "-", axp.getDC2Voltage());
+
+    // DC3 700~3500 mV,IMAX=0.7A;
+    axp.setDC3Voltage(3300);
+    Serial.printf("DC3  :%s   Voltage:%u mV \n",  axp.isEnableDC3()  ? "+" : "-", axp.getDC3Voltage());
+
+
+    //LDO2 1800~3300 mV, 100mV/step, IMAX=200mA
+    axp.setLDO2Voltage(1800);
+
+    //LDO3 1800~3300 mV, 100mV/step, IMAX=200mA
+    axp.setLDO3Voltage(1800);
+
+    //LDOio 1800~3300 mV, 100mV/step, IMAX=50mA
+    axp.setLDOioVoltage(3300);
+
+    axp.enableDC2();
+    axp.enableDC3();
+    axp.enableLDO2();
+    axp.enableLDO3();
+    axp.enableLDOio();
+
+    axp.enableTemperatureMeasure();
+    axp.enableBattDetection();
+    axp.enableVbusVoltageMeasure();
+    axp.enableBattVoltageMeasure();
+    axp.enableSystemVoltageMeasure();
+
+    axp.clearIrqStatus();
+
+    axp.enableIRQ(
+             XPOWERS_AXP192_BAT_INSERT_IRQ    | XPOWERS_AXP192_BAT_REMOVE_IRQ      |   //BATTERY
+             XPOWERS_AXP192_VBUS_INSERT_IRQ   | XPOWERS_AXP192_VBUS_REMOVE_IRQ     |   //VBUS
+             XPOWERS_AXP192_PKEY_SHORT_IRQ    | XPOWERS_AXP192_PKEY_LONG_IRQ       |   //POWER KEY
+             XPOWERS_AXP192_BAT_CHG_DONE_IRQ  | XPOWERS_AXP192_BAT_CHG_START_IRQ   |    //CHARGE
+             // XPOWERS_AXP192_PKEY_NEGATIVE_IRQ | XPOWERS_AXP192_PKEY_POSITIVE_IRQ   |   //POWER KEY
+             XPOWERS_AXP192_TIMER_TIMEOUT_IRQ               //Timer
+     );
+    runSensor(nullptr);
 }
 
 void loop() {
@@ -77,15 +135,15 @@ void loop() {
 }
 
 bool runSensor(void *) {
-  
-  
-float isCharging = axp.isCharging();
-boolean isFullyCharged = axp.isBatChagerDoneIrq();
+
+
+bool isCharging = axp.isCharging();
+bool isFullyCharged = axp.isBatChargeDoneIrq();
 float batteryVoltage = axp.getBattVoltage();
 float batteryDischarge = axp.getAcinCurrent();
 float getTemp = axp.getTemperature();
 int battPercentage = axp.getBatteryPercent();
-   
+
     Serial.println("--- T-BEAM Power Information ---");
     Serial.print("Duck charging (1 = Yes): ");
     Serial.println(isCharging);
@@ -101,8 +159,7 @@ int battPercentage = axp.getBatteryPercent();
     Serial.println(battPercentage);
 
 
-  std::string sensorVal =
-  "Charging: ";
+  std::string sensorVal = "Charging: ";
   sensorVal.append(isCharging ? "Yes" : "No")
   .append(" BattFull: ")
   .append(isFullyCharged ? "Yes" : "No")
@@ -111,7 +168,10 @@ int battPercentage = axp.getBatteryPercent();
   .append(" Temp: ")
   .append(std::to_string(getTemp));
 
+  HardwareSerial *serial = &Serial;
+    serial->println(sensorVal.c_str());
+
   
-  duck.sendData(topics::sensor, sensorVal);
+  //duck.sendData(topics::sensor, sensorVal);
   return true;
 }
