@@ -93,16 +93,16 @@ static const unsigned char u8g_logo_bits[] U8X8_PROGMEM = {
 
 
 
-DuckDisplay* DuckDisplay::getInstance() {
+U8G2Display* U8G2Display::getInstance() {
     if (!instance) {
-        instance = new DuckDisplay;
+        instance = new U8G2Display;
     }
     return instance;
 }
 
 #ifndef CDPCFG_OLED_NONE
 
-void DuckDisplay::setupDisplay(int duckType, std::array<byte,8> name) {
+void U8G2Display::setupDisplay(int duckType, std::array<byte,8> name) {
     u8g2.begin();        // clear the internal memory
     u8g2.setFont(u8g2_font_synchronizer_nbp_tf); // choose a suitable font
     u8g2.clearBuffer();
@@ -127,7 +127,7 @@ void DuckDisplay::setupDisplay(int duckType, std::array<byte,8> name) {
 }
 
 
-void DuckDisplay::powerSave(bool save) {
+void U8G2Display::powerSave(bool save) {
     if (save) {
         // TODO check what the power save mode is with the new driver
         u8g2.clear();
@@ -136,34 +136,34 @@ void DuckDisplay::powerSave(bool save) {
     }
 }
 
-void DuckDisplay::drawString(u8g2_uint_t x, u8g2_uint_t y, const char *s) {
+void U8G2Display::drawString(u8g2_uint_t x, u8g2_uint_t y, const char *s) {
     u8g2.drawStr(x, y, s);
 }
 
-void DuckDisplay::drawString(bool cls, u8g2_uint_t x, u8g2_uint_t y, const char *s) {
+void U8G2Display::drawString(bool cls, u8g2_uint_t x, u8g2_uint_t y, const char *s) {
     if (cls) {
         clear();
     }
     drawString(x, y, s);
 }
 
-void DuckDisplay::clearLine(u8g2_uint_t x, u8g2_uint_t y) {
+void U8G2Display::clearLine(u8g2_uint_t x, u8g2_uint_t y) {
     u8g2.setDrawColor(0);
     u8g2.drawBox(x, y-10, 200, 10);
     sendBuffer();
     u8g2.setDrawColor(1);
 }
 
-void DuckDisplay::setCursor(u8g2_uint_t x, u8g2_uint_t y) { u8g2.setCursor(x, y); }
+void U8G2Display::setCursor(u8g2_uint_t x, u8g2_uint_t y) { u8g2.setCursor(x, y); }
 
-void DuckDisplay::print(std::string s) { u8g2.print(s.c_str()); }
+void U8G2Display::print(std::string s) { u8g2.print(s.c_str()); }
 
-void DuckDisplay::clear(void) { u8g2.clear(),u8g2.clearBuffer(); }
+void U8G2Display::clear(void) { u8g2.clear(),u8g2.clearBuffer(); }
 
-void DuckDisplay::sendBuffer(void){  u8g2.sendBuffer();}
+void U8G2Display::sendBuffer(void){  u8g2.sendBuffer();}
 
 #ifndef CDPCFG_OLED_NONE
-std::string DuckDisplay::duckTypeToString(int duckType) {
+std::string U8G2Display::duckTypeToString(int duckType) {
     std::string duckTypeStr = "";
     switch (duckType) {
         case DuckType::PAPA:
@@ -186,7 +186,7 @@ std::string DuckDisplay::duckTypeToString(int duckType) {
 #endif // CDPCFG_OLED_NONE
 
 
-void DuckDisplay::showDefaultScreen() {
+void U8G2Display::showDefaultScreen() {
 #ifdef CDPCFG_OLED_64x32
     // small display 64x32
   setCursor(0, 2);

@@ -17,7 +17,7 @@
 #include <Arduino.h>
 #include <vector>
 #include <string>
-#include <DuckDisplay.h>
+#include <IDuckDisplay.h>
 
 #ifndef CDPCFG_OLED_NONE
 #include <U8g2lib.h>
@@ -30,14 +30,14 @@
  * status information about the network and the device.
  *
  */
-class U8G2Display : public DuckDisplay {
+class U8G2Display : public IDuckDisplay{
 public:
     /**
      * @brief Get the Singletom instance of the DuckDisplay class.
      *
      * @returns A pointer to a DuckDisplay object.
      */
-    static DuckDisplay* getInstance();
+    static U8G2Display* getInstance();
 #ifdef CDPCFG_OLED_NONE
     void setupDisplay(int duckType, std::array<byte,8> name) {}
   void powerSave(bool save) {}
@@ -62,7 +62,7 @@ public:
      *
      * @param save Set to true to enable power saving, false to disable
      */
-    void powerSave(bool save);
+    void powerSave(bool save) override;
     /**
      * @brief Draw a string at the given coordinates.
      *
@@ -110,9 +110,10 @@ public:
     void log(std::string text) {}
 #endif // CDPCFG_OLED_NONE
 private:
-    //U8G2Display();
-    //DuckDisplay(DuckDisplay const&) = delete;
-    //class DuckDisplay& operator=(class DuckDisplay const&) = delete;
+    U8G2Display(){ this->instance = nullptr; }
+    U8G2Display(U8G2Display const&) = delete;
+    U8G2Display& operator=(U8G2Display const&) = delete;
+    static U8G2Display* instance;
 
 #ifndef CDPCFG_OLED_NONE
     int duckType;
