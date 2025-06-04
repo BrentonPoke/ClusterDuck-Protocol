@@ -19,7 +19,6 @@
 #include <string>
 
 #ifndef CDPCFG_OLED_NONE
-#include <U8g2lib.h>
 
 #endif // CDPCFG_OLED_NONE
 /**
@@ -36,7 +35,7 @@ public:
    * 
    * @returns A pointer to a DuckDisplay object.
    */
-  static DuckDisplay* getInstance();
+  virtual static DuckDisplay* getInstance();
 #ifdef CDPCFG_OLED_NONE
   void setupDisplay(int duckType, std::array<byte,8> name) {}
   void powerSave(bool save) {}
@@ -55,13 +54,13 @@ public:
    * @brief Initialize the display component.
    * 
    */
-  void setupDisplay(int duckType, std::array<byte,8> name);
+   virtual void setupDisplay(int duckType, std::array<byte,8> name);
   /**
    * @brief Toggle the display in or out of power saving mode.
    * 
    * @param save Set to true to enable power saving, false to disable
    */
-  void powerSave(bool save);
+  virtual void powerSave(bool save);
   /**
    * @brief Draw a string at the given coordinates.
    *
@@ -69,7 +68,7 @@ public:
    * @param y     value of Y coordinate
    * @param text  string to draw
    */
-  void drawString(u8g2_uint_t x, u8g2_uint_t y, const char *s);
+  virtual void drawString(u8g2_uint_t x, u8g2_uint_t y, const char *s);
   /**
    * @brief Draw a string at the given coordinates.
    *
@@ -78,41 +77,41 @@ public:
    * @param y     value of Y coordinate
    * @param text  string to draw
    */
-  void drawString(bool cls, u8g2_uint_t x, u8g2_uint_t y, const char *s);
+  virtual void drawString(bool cls, u8g2_uint_t x, u8g2_uint_t y, const char *s);
   /**
    * @brief Set the cursor to the given position on the screen.
    *
    * @param x X coordinate value
    * @param y Y coordinate value
    */
-  void setCursor(u8g2_uint_t x, u8g2_uint_t y);
+  virtual void setCursor(u8g2_uint_t x, u8g2_uint_t y);
   /**
    * @brief Print a string at the current cursor position.
    *
    * @param text string to draw
    */
-  void print(std::string s);
+  virtual void print(std::string s);
   /**
    * @brief Clear the screen.
    * 
    */
-  void clear(void);
+  virtual void clear(void);
 
-  void clearLine(u8g2_uint_t x, u8g2_uint_t y);
+  virtual void clearLine(u8g2_uint_t x, u8g2_uint_t y);
 
-  void sendBuffer(void);
-  void showDefaultScreen();
-  uint8_t getWidth() {return width;}
-  uint8_t getHeight() {return height;}
+  virtual void sendBuffer(void);
+  virtual void showDefaultScreen();
+  virtual uint8_t getWidth() {return width;}
+  virtual uint8_t getHeight() {return height;}
   
   //TODO implement this for the U8g2 library
-  void log(std::string text) {}
+  virtual void log(std::string text) {}
 #endif // CDPCFG_OLED_NONE
 private:
   DuckDisplay();
   DuckDisplay(DuckDisplay const&) = delete;
   DuckDisplay& operator=(DuckDisplay const&) = delete;
-  static DuckDisplay* instance;
+  static DuckDisplay* instance = nullptr;
 
 #ifndef CDPCFG_OLED_NONE
   int duckType;
