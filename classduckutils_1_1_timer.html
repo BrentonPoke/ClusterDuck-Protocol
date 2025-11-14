@@ -91,46 +91,54 @@ $(document).ready(function(){initNavTree('classduckutils_1_1_timer.html',''); in
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classduckutils_1_1_timer-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">duckutils::Timer&lt; callable, arguments &gt; Class Template Reference</div></div>
+  <div class="headertitle"><div class="title">duckutils::Timer Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Create a timer instance.  
+<p>Create a timer instance. Takes packed arguments for the callable. Is a blocking call.  
  <a href="classduckutils_1_1_timer.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_duck_utils_8h_source.html">DuckUtils.h</a>&gt;</code></p>
 <div class="dynheader">
-Collaboration diagram for duckutils::Timer&lt; callable, arguments &gt;:</div>
+Collaboration diagram for duckutils::Timer:</div>
 <div class="dyncontent">
-<div class="center"><img src="classduckutils_1_1_timer__coll__graph.png" border="0" usemap="#aduckutils_1_1_timer_3_01callable_00_01arguments_01_4_coll__map" alt="Collaboration graph"/></div>
+<div class="center"><img src="classduckutils_1_1_timer__coll__graph.png" border="0" usemap="#aduckutils_1_1_timer_coll__map" alt="Collaboration graph"/></div>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a796b6c5a7c87d1e33cac482989ff9bfb" id="r_a796b6c5a7c87d1e33cac482989ff9bfb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classduckutils_1_1_timer.html#a796b6c5a7c87d1e33cac482989ff9bfb">Timer</a> (unsigned int in, bool async, callable &amp;&amp;f, arguments &amp;&amp;... args)</td></tr>
-<tr class="separator:a796b6c5a7c87d1e33cac482989ff9bfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1667ef76bfbf3f5b3eed81f0a0746c2e" id="r_a1667ef76bfbf3f5b3eed81f0a0746c2e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classduckutils_1_1_timer.html#a1667ef76bfbf3f5b3eed81f0a0746c2e">Timer</a> (Timer::time_point_t at, bool async, callable &amp;&amp;f, arguments &amp;&amp;... args)</td></tr>
-<tr class="separator:a1667ef76bfbf3f5b3eed81f0a0746c2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72479d99e7235cc1a0f36e28fa5996c9" id="r_a72479d99e7235cc1a0f36e28fa5996c9"><td class="memTemplParams" colspan="2">template&lt;class callable  = nullptr_t, class... arguments&gt; </td></tr>
+<tr class="memitem:a72479d99e7235cc1a0f36e28fa5996c9"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classduckutils_1_1_timer.html#a72479d99e7235cc1a0f36e28fa5996c9">Timer</a> (unsigned int in, callable &amp;&amp;f, arguments &amp;&amp;... args)</td></tr>
+<tr class="separator:a72479d99e7235cc1a0f36e28fa5996c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a244967908ef1369f1c9adc70a498c57b" id="r_a244967908ef1369f1c9adc70a498c57b"><td class="memTemplParams" colspan="2">template&lt;class callable  = nullptr_t, class... arguments&gt; </td></tr>
+<tr class="memitem:a244967908ef1369f1c9adc70a498c57b"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classduckutils_1_1_timer.html#a244967908ef1369f1c9adc70a498c57b">Timer</a> (<a class="el" href="namespaceduckutils.html#a250edd75b91f0995077b3bd50dc2f098">time_point_t</a> at, callable &amp;&amp;f, arguments &amp;&amp;... args)</td></tr>
+<tr class="separator:a244967908ef1369f1c9adc70a498c57b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a59230a76aaebaa2892dc79314fc9d8d1" id="r_a59230a76aaebaa2892dc79314fc9d8d1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceduckutils.html#a250edd75b91f0995077b3bd50dc2f098">time_point_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classduckutils_1_1_timer.html#a59230a76aaebaa2892dc79314fc9d8d1">now</a> ()</td></tr>
+<tr class="memdesc:a59230a76aaebaa2892dc79314fc9d8d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current time point in milliseconds since epoch.  <br /></td></tr>
+<tr class="separator:a59230a76aaebaa2892dc79314fc9d8d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;class callable, class... arguments&gt;<br />
-class duckutils::Timer&lt; callable, arguments &gt;</div><p>Create a timer instance. </p>
-<dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="classduckutils_1_1_timer.html" title="Create a timer instance.">Timer</a> instance. </dd></dl>
+<div class="textblock"><p>Create a timer instance. Takes packed arguments for the callable. Is a blocking call. </p>
+<dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="classduckutils_1_1_timer.html" title="Create a timer instance. Takes packed arguments for the callable. Is a blocking call.">Timer</a> instance. </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a796b6c5a7c87d1e33cac482989ff9bfb" name="a796b6c5a7c87d1e33cac482989ff9bfb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a796b6c5a7c87d1e33cac482989ff9bfb">&#9670;&#160;</a></span>Timer() <span class="overload">[1/2]</span></h2>
+<a id="a72479d99e7235cc1a0f36e28fa5996c9" name="a72479d99e7235cc1a0f36e28fa5996c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72479d99e7235cc1a0f36e28fa5996c9">&#9670;&#160;</a></span>Timer() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class callable , class... arguments&gt; </div>
+template&lt;class callable  = nullptr_t, class... arguments&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classduckutils_1_1_timer.html">duckutils::Timer</a>&lt; callable, arguments &gt;::Timer </td>
+          <td class="memname">duckutils::Timer::Timer </td>
           <td>(</td>
           <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>in</em>, </td>
@@ -138,12 +146,6 @@ template&lt;class callable , class... arguments&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>async</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">callable &amp;&amp;&#160;</td>
           <td class="paramname"><em>f</em>, </td>
         </tr>
@@ -168,28 +170,22 @@ template&lt;class callable , class... arguments&gt; </div>
 
 </div>
 </div>
-<a id="a1667ef76bfbf3f5b3eed81f0a0746c2e" name="a1667ef76bfbf3f5b3eed81f0a0746c2e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1667ef76bfbf3f5b3eed81f0a0746c2e">&#9670;&#160;</a></span>Timer() <span class="overload">[2/2]</span></h2>
+<a id="a244967908ef1369f1c9adc70a498c57b" name="a244967908ef1369f1c9adc70a498c57b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a244967908ef1369f1c9adc70a498c57b">&#9670;&#160;</a></span>Timer() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class callable , class... arguments&gt; </div>
+template&lt;class callable  = nullptr_t, class... arguments&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classduckutils_1_1_timer.html">duckutils::Timer</a>&lt; callable, arguments &gt;::Timer </td>
+          <td class="memname">duckutils::Timer::Timer </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classduckutils_1_1_timer.html">Timer</a>&lt; callable, arguments &gt;::time_point_t&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceduckutils.html#a250edd75b91f0995077b3bd50dc2f098">time_point_t</a>&#160;</td>
           <td class="paramname"><em>at</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>async</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -215,6 +211,35 @@ template&lt;class callable , class... arguments&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a59230a76aaebaa2892dc79314fc9d8d1" name="a59230a76aaebaa2892dc79314fc9d8d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59230a76aaebaa2892dc79314fc9d8d1">&#9670;&#160;</a></span>now()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="namespaceduckutils.html#a250edd75b91f0995077b3bd50dc2f098">time_point_t</a> duckutils::Timer::now </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the current time point in milliseconds since epoch. </p>
+<dl class="section return"><dt>Returns</dt><dd>A time_point_t representing the current time. </dd></dl>
 
 </div>
 </div>

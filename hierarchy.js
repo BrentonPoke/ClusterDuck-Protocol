@@ -17,5 +17,5 @@ var hierarchy =
     [ "Neighbor", "class_neighbor.html", null ],
     [ "RouteJSON", "class_route_j_s_o_n.html", null ],
     [ "SignalScore", "struct_signal_score.html", null ],
-    [ "duckutils::Timer< callable, arguments >", "classduckutils_1_1_timer.html", null ]
+    [ "duckutils::Timer", "classduckutils_1_1_timer.html", null ]
 ];

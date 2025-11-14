@@ -5,5 +5,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
   node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
   rankdir="LR";
-  Node0 [id="Node000000",label="duckutils::Timer\< callable,\l arguments \>",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classduckutils_1_1_timer.html",tooltip="Create a timer instance."];
+  Node0 [id="Node000000",label="duckutils::Timer",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classduckutils_1_1_timer.html",tooltip="Create a timer instance. Takes packed arguments for the callable. Is a blocking call."];
 }
