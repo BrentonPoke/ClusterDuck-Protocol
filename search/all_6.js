@@ -20,7 +20,7 @@ var searchData=
   ['getrandombytes_17',['getRandomBytes',['../namespaceduckutils.html#af78c3c72848c8c50effe19cd5edc25d3',1,'duckutils']]],
   ['getreceiveflag_18',['getReceiveFlag',['../class_duck_lo_ra.html#a946c2dd9d8667051f6b99a929d510ede',1,'DuckLoRa']]],
   ['getroutingscore_19',['getRoutingScore',['../class_neighbor.html#a1d20fc33c9afc5ac6b6663e979c4045b',1,'Neighbor']]],
-  ['getrssi_20',['getrssi',['../class_neighbor.html#a0aa7cc4d0d3af849ff9348f7acbc2986',1,'Neighbor::getRssi()'],['../class_duck_lo_ra.html#a0f5ef68bf4dee5a6570797e225b7b0ff',1,'DuckLoRa::getRSSI()']]],
+  ['getrssi_20',['getrssi',['../class_duck_lo_ra.html#a0f5ef68bf4dee5a6570797e225b7b0ff',1,'DuckLoRa::getRSSI()'],['../class_neighbor.html#a0aa7cc4d0d3af849ff9348f7acbc2986',1,'Neighbor::getRssi()']]],
   ['getsignalscore_21',['getSignalScore',['../class_duck.html#acb9c57dec730e6ea5f093d6b02350ee1',1,'Duck']]],
   ['getsnr_22',['getsnr',['../class_neighbor.html#a571c1e89e43a3721b37d91230b12cbc7',1,'Neighbor::getSnr()'],['../class_duck_lo_ra.html#a0ff1b5a694b6214679ed48b6cfbcfbff',1,'DuckLoRa::getSNR()']]],
   ['getting_20started_23',['Getting Started',['../index.html#autotoc_md9',1,'']]],

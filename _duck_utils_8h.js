@@ -1,7 +1,6 @@
 var _duck_utils_8h =
 [
-    [ "duckutils::Timer", "classduckutils_1_1_timer.html", "classduckutils_1_1_timer" ],
-    [ "time_point_t", "_duck_utils_8h.html#a250edd75b91f0995077b3bd50dc2f098", null ],
+    [ "duckutils::Timer< callable, arguments >", "classduckutils_1_1_timer.html", "classduckutils_1_1_timer" ],
     [ "arrayToHexString", "_duck_utils_8h.html#a53498bb1e1c667d10957b46309232a09", null ],
     [ "convertToHex", "_duck_utils_8h.html#afe0c55ac9f352c8295641a6f50915b1b", null ],
     [ "createUuid", "_duck_utils_8h.html#aff2e7f9ce8df861a748df8a3f84be721", null ],

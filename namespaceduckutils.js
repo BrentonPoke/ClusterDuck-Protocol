@@ -1,7 +1,6 @@
 var namespaceduckutils =
 [
     [ "Timer", "classduckutils_1_1_timer.html", "classduckutils_1_1_timer" ],
-    [ "time_point_t", "namespaceduckutils.html#a250edd75b91f0995077b3bd50dc2f098", null ],
     [ "arrayToHexString", "namespaceduckutils.html#a53498bb1e1c667d10957b46309232a09", null ],
     [ "convertToHex", "namespaceduckutils.html#afe0c55ac9f352c8295641a6f50915b1b", null ],
     [ "createUuid", "namespaceduckutils.html#aff2e7f9ce8df861a748df8a3f84be721", null ],
