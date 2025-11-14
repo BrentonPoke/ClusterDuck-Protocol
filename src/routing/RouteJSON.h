@@ -39,9 +39,25 @@ class RouteJSON {
          *
          * @param packetData the received packet data as a byte vector
          */
-        RouteJSON(std::vector<uint8_t> packetData) {
-            deserializeJson(json, packetData);
+        RouteJSON(std::vector<uint8_t> packetData, bool msgpack) {
+            if(msgpack) {
+                ArduinoJson::DeserializationError err = deserializeMsgPack(json, packetData);
+                if (err) {
+                    logerr_ln("RouteJSON: Failed to parse MsgPack data: %s", err.c_str());
+                }
+            }
+            else{
+                ArduinoJson::DeserializationError err = deserializeJson(json, packetData);
+                if (err) {
+                    logerr_ln("RouteJSON: Failed to parse JSON data: %s", err.c_str());
+                }
+            }
             path = json["path"].to<ArduinoJson::JsonArray>();
+        }
+        std::string toMsgpack(){
+            std::string output;
+            serializeMsgPack(json, output);
+            return output;
         }
 
         std::string asString(){

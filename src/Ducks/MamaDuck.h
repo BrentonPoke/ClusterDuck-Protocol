@@ -9,7 +9,7 @@ class MamaDuck : public Duck<WifiCapability, RadioType> {
 public:
     using Duck<WifiCapability, RadioType>::Duck;
 
-    MamaDuck(std::string name = "MAMA0001") : Duck<WifiCapability, RadioType>(std::move(name)) {}
+    MamaDuck(std::string name = "MAMA0001", bool msgpack = false) : Duck<WifiCapability, RadioType>(std::move(name)),msgpackEnabled(msgpack) {}
 
     ~MamaDuck() {};
 
@@ -32,6 +32,7 @@ public:
 private :
     WifiCapability duckWifi;
     rxDoneCallback recvDataCallback;
+    bool msgpackEnabled = false;
     /**
      * @brief Handles any packets received by the duck. Overrides the pure virtual function in Duck base class.
      * Could be a RREQ, RREP, PING, PONG or DATA packet on its associated topic.
@@ -69,7 +70,10 @@ private :
             case reservedTopic::rreq: {
                 loginfo_ln("RREQ received from %s. Sending Response!", rxPacket.sduid.data());
                 RouteJSON rrepDoc = RouteJSON(rxPacket.sduid, this->duid);
-                this->sendRouteResponse(rxPacket.sduid, rrepDoc.asString());
+                if(msgpackEnabled)
+                    this->sendRouteResponse(rxPacket.sduid, rrepDoc.toMsgpack());
+                else
+                    this->sendRouteResponse(rxPacket.sduid, rrepDoc.asString());
                 // Update routing table with signal info
                 this->router.insertIntoRoutingTable(rxPacket.sduid, rrepDoc.getlastInPath(), this->getSignalScore());
                 break;
@@ -109,11 +113,13 @@ private :
 
         switch(rxPacket.topic) {
             case reservedTopic::rreq: {
-                RouteJSON rreqDoc = RouteJSON(rxPacket.asBytes());
+                RouteJSON rreqDoc = RouteJSON(rxPacket.asBytes(), msgpackEnabled);
                 if(!relay) {
                     loginfo_ln("handleReceivedPacket: Sending RREP");
-                    this->sendRouteResponse(rreqDoc.getlastInPath(), rreqDoc.asString());
-                    return;//should this be here?
+                    if(msgpackEnabled)
+                        this->sendRouteResponse(rreqDoc.getlastInPath(), rreqDoc.toMsgpack());
+                    else
+                        this->sendRouteResponse(rreqDoc.getlastInPath(), rreqDoc.asString());
                 } else {
                     loginfo_ln("RREQ received for relay. Relaying!");
                     rxPacket.data = duckutils::stringToByteVector(rreqDoc.addToPath(this->duid)); //why is this different from stringToArray
@@ -130,13 +136,16 @@ private :
           
             case reservedTopic::rrep: {
                 //we still need to recieve rreps in case of ttl expiry
-                RouteJSON rrepDoc = RouteJSON(rxPacket.asBytes());
+                RouteJSON rrepDoc = RouteJSON(rxPacket.asBytes(), msgpackEnabled);
                 if(relay){ 
                     loginfo_ln("Received Route Response from DUID: %s", rxPacket.sduid.data(), rxPacket.sduid.size());
 
                     rrepDoc.removeFromPath(this->duid);
                     //route responses need a way to keep tray of who relayed the packet, but a response needs to be directed and not broadly relayed
-                    this->sendRouteResponse(rrepDoc.getlastInPath(), rrepDoc.asString()); //so here the relaying duck is known from sduid
+                    if(msgpackEnabled)
+                        this->sendRouteResponse(rrepDoc.getlastInPath(), rrepDoc.toMsgpack());
+                    else
+                        this->sendRouteResponse(rrepDoc.getlastInPath(), rrepDoc.asString()); //so here the relaying duck is known from sduid
                 }
                 //destination = sender of the rrep -> the last hop to current duck
                 Duid thisId = rxPacket.sduid;
