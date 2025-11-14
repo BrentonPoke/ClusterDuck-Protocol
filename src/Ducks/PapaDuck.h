@@ -9,7 +9,7 @@ class PapaDuck : public Duck<WifiCapability, RadioType> {
 public:
   using Duck<WifiCapability, RadioType>::Duck;
   
-  PapaDuck(std::string name = "PAPADUCK") : Duck<WifiCapability, RadioType>(std::move(name)) {}
+  PapaDuck(std::string name = "PAPADUCK", bool msgpack = false) : Duck<WifiCapability, RadioType>(std::move(name)), msgpackEnabled(msgpack) {}
   ~PapaDuck() {}
 
   /// Papa Duck callback functions signature.
@@ -37,6 +37,7 @@ public:
 
 private:
   rxDoneCallback recvDataCallback;
+  bool msgpackEnabled;
   
   void handleReceivedPacket() {
     int err;
@@ -66,7 +67,10 @@ private:
         case reservedTopic::rreq: {
             loginfo_ln("RREQ received from %s. Sending Response!", rxPacket.sduid.data());
             RouteJSON rrepDoc = RouteJSON(rxPacket.sduid, this->duid);
-            this->sendRouteResponse(rxPacket.sduid, rrepDoc.asString());
+            if(this->msgpackEnabled)
+                this->sendRouteResponse(rxPacket.sduid, rrepDoc.toMsgpack());
+            else
+                this->sendRouteResponse(rxPacket.sduid, rrepDoc.asString());
             // Update routing table with signal info
             this->router.insertIntoRoutingTable(rxPacket.sduid, rrepDoc.getlastInPath(), this->getSignalScore());
             break;
@@ -105,10 +109,13 @@ private:
 void ifNotBroadcast(CdpPacket rxPacket, int err, bool relay = false) {
     switch(rxPacket.topic) {
         case reservedTopic::rreq: {
-            RouteJSON rreqDoc = RouteJSON(rxPacket.asBytes());
+            RouteJSON rreqDoc = RouteJSON(rxPacket.asBytes(), this->msgpackEnabled);
             if(!relay) {
                 loginfo_ln("handleReceivedPacket: Sending RREP");
-                this->sendRouteResponse(rreqDoc.getlastInPath(), rreqDoc.asString());
+                if(this->msgpackEnabled)
+                    this->sendRouteResponse(rxPacket.sduid, rreqDoc.toMsgpack());
+                else
+                    this->sendRouteResponse(rreqDoc.getlastInPath(), rreqDoc.asString());
                 return;//should this be here?
             } else {
                 loginfo_ln("RREQ received for relay. Relaying!");
@@ -126,13 +133,16 @@ void ifNotBroadcast(CdpPacket rxPacket, int err, bool relay = false) {
       
         case reservedTopic::rrep: {
             //we still need to recieve rreps in case of ttl expiry
-            RouteJSON rrepDoc = RouteJSON(rxPacket.asBytes());
+            RouteJSON rrepDoc = RouteJSON(rxPacket.asBytes(), this->msgpackEnabled);
             if(relay){ 
                 loginfo_ln("Received Route Response from DUID: %s", duckutils::convertToHex(rxPacket.sduid.data(), rxPacket.sduid.size()));
 
                 rrepDoc.removeFromPath(this->duid);
                 //route responses need a way to keep tray of who relayed the packet, but a response needs to be directed and not broadly relayed
-                this->sendRouteResponse(rrepDoc.getlastInPath(), rrepDoc.asString()); //so here the relaying duck is known from sduid
+                if(this->msgpackEnabled)
+                    this->sendRouteResponse(rrepDoc.getlastInPath(), rrepDoc.toMsgpack());
+                else
+                    this->sendRouteResponse(rrepDoc.getlastInPath(), rrepDoc.asString()); //so here the relaying duck is known from sduid
             }
             //destination = sender of the rrep -> the last hop to current duck
             Duid thisId = rxPacket.sduid;
