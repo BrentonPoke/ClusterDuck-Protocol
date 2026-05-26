@@ -17,7 +17,7 @@
 class RouteJSON {
     public:
         /**
-         * @brief Construct a new Route JSON object
+         * @brief Construct a new Route JSON object. Duid is a typedef of std::array<uint8_t,8>
          *
          * @param targetDevice the destination device DUID
          * @param sourceDevice the source device DUID
@@ -26,10 +26,11 @@ class RouteJSON {
             json["origin"] = duckutils::toString(sourceDevice);
             json["destination"] = duckutils::toString(targetDevice);
             json["path"].as<ArduinoJson::JsonArray>();
-
+#ifdef CDP_LOG_DEBUG
             std::string log;
             serializeJson(json, log);
             loginfo_ln("RouteDoc: %s", log.c_str());
+#endif
         }
 
         //Create JSON from rxPacket
@@ -49,7 +50,11 @@ class RouteJSON {
             }
             origin = json["origin"].as<const char*>();
             destination = json["destination"].as<const char*>();
-            logdbg_ln("Built RouteJSON from packet data: %s",json.as<std::string>().c_str());
+#ifdef CDP_LOG_DEBUG
+            std::string log;
+            serializeJson(json, log);
+            logdbg_ln("Built RouteJSON from packet data: %s",log));
+#endif
         }
 
         std::string asString(){
@@ -64,9 +69,11 @@ class RouteJSON {
             json["origin"] = origin;
             json["destination"] = destination;
 
+#ifdef CDP_LOG_DEBUG
             std::string log;
             serializeJson(json, log);
-
+            logdbg_ln("RREP: %s",log);
+#endif
             return json.as<std::string>();
         }
         Duid getOrigin(){
@@ -93,7 +100,7 @@ class RouteJSON {
 #ifdef CDP_LOG_DEBUG
             std::string log;
             serializeJson(json, log);
-            logdbg_ln("RREQ: %s", log.c_str());
+            logdbg_ln("RREQ: %s", log);
 #endif
             return json.as<std::string>();
             //add rssi snr
@@ -104,11 +111,11 @@ class RouteJSON {
             if(objPath.size() > 0){
                 auto last = objPath[objPath.size()-1];
                 std::copy(last.begin(), last.end(),lastDuid.begin());
-
+#ifdef CDP_LOG_DEBUG
                 std::string log;
                 serializeJson(json, log);
-                logdbg_ln("RREQ: %s", log.c_str());
-
+                logdbg_ln("RREQ: %s",log);
+#endif
                 return lastDuid;
 
             } else{
@@ -119,18 +126,16 @@ class RouteJSON {
 
     /**
      * @brief pop the last duck node from the route response path
-     *
-     * @param deviceId of the duck node to be removed
      * @return the newly modified Arduino JSON document
      */
     std::string popFromPath(){
         objPath.pop_back();
         updateJsonPath();
-        
+#ifdef CDP_LOG_DEBUG
         std::string log;
         serializeJson(json, log);
-        logdbg_ln("Packet: %s", log.c_str());
-
+        logdbg_ln("Packet: %s", log);
+#endif
         return json.as<std::string>();
     }
 
